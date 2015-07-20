@@ -35,6 +35,7 @@ def get_words(length, letters):
 
 class Word(messages.Message):
     word = messages.StringField(1)
+    frequency = messages.StringField(2)
 
 
 class Words(messages.Message):
@@ -56,6 +57,6 @@ class WordsApi(remote.Service):
                       name='words.get')
     def get_words(self, request):
         words = get_words(request.length, request.choices)
-        return Words(words=[Word(word=w) for w in words])
+        return Words(words=[Word(word=w, frequency=str(WORDS.get(w))) for w in words])  # noqa
 
 app = endpoints.api_server([WordsApi])
