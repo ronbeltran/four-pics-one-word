@@ -7,7 +7,7 @@ from game import app
 def home():
     context = {}
     if request.method == "POST":
-        length = request.form['length']
+        length = request.form['length'] or 1
         letters = request.form['letters']
         context.update({
             'length': int(length),

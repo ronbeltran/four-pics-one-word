@@ -3,9 +3,10 @@
 {% block body %}
 <form action="." method="post">
     <label for="length">How many letters?</label>
-    <input type="number" data-clear-btn="false" name="length" min="1" max="26" value="{{ length }}">
+    <input type="number" data-clear-btn="false" id="length" name="length" min="1" max="26" value="{{ length }}">
     <label for="letters">Enter the letter choices:</label>
-    <input type="text" name="letters" value="{{ letters }}">
-    <button class="ui-shadow ui-btn ui-corner-all">Submit</button>
+    <input type="text" id="letters" name="letters" value="{{ letters }}">
+    <br>
+    <button class="ui-shadow ui-btn ui-corner-all" id="submit">Submit</button>
 </form>
 {% endblock %}
