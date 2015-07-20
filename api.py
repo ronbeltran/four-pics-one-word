@@ -50,13 +50,13 @@ WORDS_CRITERIA_RESOURCE = endpoints.ResourceContainer(
     choices=messages.StringField(2, required=True)
 )
 
-WEB_CLIENT_ID = ''
+WEB_CLIENT_ID = '471311115005-4bd8aqpnmrnro61ntdgstb2bsbvhma90.apps.googleusercontent.com'
 ANDROID_CLIENT_ID = ''
 IOS_CLIENT_ID = ''
 ANDROID_AUDIENCE = WEB_CLIENT_ID
 
 
-@endpoints.api(name='wordsapi', version='1',
+@endpoints.api(name='wordsapi', version='v1',
                allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID],  # noqa
                audiences=[ANDROID_AUDIENCE],)
 class WordsApi(remote.Service):
