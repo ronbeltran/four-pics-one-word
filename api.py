@@ -6,6 +6,8 @@ from protorpc import messages
 from protorpc import message_types
 from protorpc import remote
 
+package = 'Wordsapi'
+
 
 WORDS = pickle.load(open('./static/google-books-common-words.bin', 'r'))
 
@@ -48,8 +50,15 @@ WORDS_CRITERIA_RESOURCE = endpoints.ResourceContainer(
     choices=messages.StringField(2, required=True)
 )
 
+WEB_CLIENT_ID = ''
+ANDROID_CLIENT_ID = ''
+IOS_CLIENT_ID = ''
+ANDROID_AUDIENCE = WEB_CLIENT_ID
 
-@endpoints.api(name='wordsapi', version='1')
+
+@endpoints.api(name='wordsapi', version='1',
+               allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID],  # noqa
+               audiences=[ANDROID_AUDIENCE],)
 class WordsApi(remote.Service):
 
     @endpoints.method(WORDS_CRITERIA_RESOURCE, Words,
@@ -58,5 +67,6 @@ class WordsApi(remote.Service):
     def get_words(self, request):
         words = get_words(request.length, request.choices)
         return Words(words=[Word(word=w, frequency=str(WORDS.get(w))) for w in words])  # noqa
+
 
 app = endpoints.api_server([WordsApi])
