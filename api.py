@@ -1,7 +1,36 @@
+import pickle
+import logging
+
 import endpoints
 from protorpc import messages
 from protorpc import message_types
 from protorpc import remote
+
+
+WORDS = pickle.load(open('./static/google-books-common-words.bin', 'r'))
+
+
+def is_subset(word, choices):
+    _choices = list(choices)
+    for c in word:
+        if c not in _choices:
+            return False
+        _choices.remove(c)
+    return True
+
+
+def get_words(length, letters):
+    candidates = []
+    selected = []
+    for key, value in WORDS.iteritems():
+        if len(key) == length:
+            candidates.append(key)
+    for word in candidates:
+        if is_subset(word, letters):
+            selected.append(word)
+    logging.info('Got {0} matches with length of {1} where choices {2}'.format(
+        len(selected), length, letters))
+    return selected
 
 
 class Word(messages.Message):
@@ -26,9 +55,7 @@ class WordsApi(remote.Service):
                       path='words/{length}/{choices}', http_method='POST',
                       name='words.get')
     def get_words(self, request):
-        return Words(words=[
-            Word(word='HELLO'),
-            Word(word='WORLD'),
-        ])
+        words = get_words(request.length, request.choices)
+        return Words(words=[Word(word=w) for w in words])
 
 app = endpoints.api_server([WordsApi])
