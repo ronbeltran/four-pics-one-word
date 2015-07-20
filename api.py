@@ -65,7 +65,7 @@ class WordsApi(remote.Service):
                       path='words/{length}/{choices}', http_method='POST',
                       name='words.get')
     def get_words(self, request):
-        words = get_words(request.length, request.choices)
+        words = get_words(request.length, request.choices.upper())
         return Words(words=[Word(word=w, frequency=str(WORDS.get(w))) for w in words])  # noqa
 
 
