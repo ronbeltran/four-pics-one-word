@@ -1,12 +1,23 @@
 {% extends "base.html" %}
 
 {% block body %}
+<div class="ui-content">
 <form action="." method="post">
     <label for="length">How many letters?</label>
     <input type="number" data-clear-btn="false" id="length" name="length" min="1" max="26" value="{{ length }}">
     <label for="letters">Enter the letter choices:</label>
     <input type="text" id="letters" name="letters" value="{{ letters }}">
-    <br>
     <button class="ui-shadow ui-btn ui-corner-all" id="submit">Submit</button>
 </form>
+</div>
+{% if words %}
+<h4>Found {{ words|length }} matches:</h4>
+<div class="matches">
+<ol data-role="listview" class="ui-listview ui-corner-all ui-shadow ui-listview-inset">
+    {% for word in words %}
+    <li>{{ word }}</li>
+    {% endfor %}
+</ol>
+</div>
+{% endif %}
 {% endblock %}
