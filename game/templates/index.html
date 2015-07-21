@@ -14,7 +14,7 @@
 <h4>Found {{ words|length }} matches:</h4>
 <div class="matches">
 <ol data-role="listview" class="ui-listview ui-corner-all ui-shadow ui-listview-inset">
-    {% for word in words %}
+    {% for word, value in words %}
     <li>{{ word }}</li>
     {% endfor %}
 </ol>

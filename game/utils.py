@@ -27,3 +27,18 @@ def get_words(length, letters):
     logging.info('Got {0} matches with length of {1} where choices {2}'.format(
         len(selected), length, letters))
     return selected
+
+
+def get_words_dict(length, letters):
+    length = int(length)
+    candidates = []
+    selected = {}
+    for key, value in WORDS.iteritems():
+        if len(key) == length:
+            candidates.append(key)
+    for word in candidates:
+        if is_subset(word, letters):
+            selected.update({word: WORDS.get(word)})
+    logging.info('Got {0} matches with length of {1} where choices {2}'.format(
+        len(selected.keys()), length, letters))
+    return selected
