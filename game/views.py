@@ -22,7 +22,7 @@ def home():
                 'letters': '',
             })
             return render_template('index.html', **context)
-        letters = letters.upper()
+        letters = letters.strip().replace(' ', '').replace('\n', '').replace('\t', '')
         key = '{0}_{1}'.format(str(length), ''.join(sorted(letters)))
         cached_data = memcache.get(key)
         if cached_data is None:
