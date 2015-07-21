@@ -1,6 +1,3 @@
-import pickle
-import logging
-
 import endpoints
 from protorpc import messages
 from protorpc import message_types
@@ -8,31 +5,7 @@ from protorpc import remote
 
 package = 'Wordsapi'
 
-
-WORDS = pickle.load(open('./static/google-books-common-words.bin', 'r'))
-
-
-def is_subset(word, choices):
-    _choices = list(choices)
-    for c in word:
-        if c not in _choices:
-            return False
-        _choices.remove(c)
-    return True
-
-
-def get_words(length, letters):
-    candidates = []
-    selected = []
-    for key, value in WORDS.iteritems():
-        if len(key) == length:
-            candidates.append(key)
-    for word in candidates:
-        if is_subset(word, letters):
-            selected.append(word)
-    logging.info('Got {0} matches with length of {1} where choices {2}'.format(
-        len(selected), length, letters))
-    return selected
+from game import utils
 
 
 class Word(messages.Message):
@@ -50,7 +23,7 @@ WORDS_CRITERIA_RESOURCE = endpoints.ResourceContainer(
     choices=messages.StringField(2, required=True)
 )
 
-WEB_CLIENT_ID = '471311115005-4bd8aqpnmrnro61ntdgstb2bsbvhma90.apps.googleusercontent.com'
+WEB_CLIENT_ID = '471311115005-4bd8aqpnmrnro61ntdgstb2bsbvhma90.apps.googleusercontent.com'  # noqa
 ANDROID_CLIENT_ID = ''
 IOS_CLIENT_ID = ''
 ANDROID_AUDIENCE = WEB_CLIENT_ID
@@ -65,8 +38,8 @@ class WordsApi(remote.Service):
                       path='words/{length}/{choices}', http_method='POST',
                       name='words.get')
     def get_words(self, request):
-        words = get_words(request.length, request.choices.upper())
-        return Words(words=[Word(word=w, frequency=str(WORDS.get(w))) for w in words])  # noqa
+        words = utils.get_words(request.length, request.choices.upper())
+        return Words(words=[Word(word=w, frequency=str(utils.WORDS.get(w))) for w in words])  # noqa
 
 
 app = endpoints.api_server([WordsApi])
