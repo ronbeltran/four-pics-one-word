@@ -1,6 +1,8 @@
 import operator
 
 from flask import render_template, request
+from google.appengine.api import memcache
+
 from game import app
 from game import utils
 
@@ -10,7 +12,13 @@ def home():
     context = {}
     if request.method == "POST":
         length = request.form['length'] or 1
-        letters = request.form['letters'] or ''
+        letters = request.form['letters'] or None
+        if letters is None:
+            context.update({
+                'length': length,
+                'letters': '',
+            })
+            return render_template('index.html', **context)
         words = utils.get_words_dict(length, letters.upper())
         sorted_words = sorted(words.items(), key=operator.itemgetter(1))
         sorted_words.reverse()
