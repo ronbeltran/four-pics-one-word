@@ -6,6 +6,7 @@ from google.appengine.api import memcache
 
 from game import app
 from game import utils
+from game import models
 
 EXPIRE_TIME = 60 * 60 * 24  # 24 hours
 
